@@ -6,8 +6,6 @@ import pygame
 from config import BLACK, BLUE, YELLOW, WHITE
 from game.level_loader import get_tile_map, TILE_SIZE
 
-FONT = pygame.font.SysFont(None, 24)
-
 def draw_maze(screen):
     """Iterates over grid data and draws walls (BLUE rectangles)."""
     rows = get_tile_map()
@@ -25,9 +23,7 @@ def draw_maze(screen):
 
 def draw_pacman(screen, pm):
     """Draws the player entity as a yellow circle."""
-    # Note: Pygame draws from the top-left corner. 
-    # Our entity pos is the CENTER, so we subtract half the radius for alignment.
-    radius = 12 
+    radius = 12
     
     pygame.draw.circle(screen, YELLOW, 
                       (int(pm.pos_x), int(pm.pos_y)), 
@@ -45,7 +41,9 @@ def draw_pellets(screen, pellet_manager):
 
 def draw_hud(screen, score):
     """Renders the Score counter in the top-left corner."""
-    text = FONT.render(f"Score: {score}", antialias=True, color=WHITE)
+    # Local font init prevents crashes on startup when the driver isn't ready yet.
+    hud_font = pygame.font.SysFont('segoeuisemibold', 24) 
+    text = hud_font.render(f"Score: {score}", antialias=True, color=WHITE)
     screen.blit(text, (10, 10))
 
 def clear_screen(screen):

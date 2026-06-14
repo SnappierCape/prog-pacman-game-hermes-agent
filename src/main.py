@@ -10,6 +10,7 @@ from ui.renderer import clear_screen, draw_maze, draw_pacman, draw_pellets, draw
 
 # Initialize pygame modules
 pygame.init()
+pygame.font.init() # Wakes up the font engine on Windows
 screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 pygame.display.set_caption(TITLE)
 clock = pygame.time.Clock()
