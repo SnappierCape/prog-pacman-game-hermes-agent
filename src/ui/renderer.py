@@ -43,7 +43,8 @@ def draw_hud(screen, score):
     """Renders the Score counter in the top-left corner."""
     # Local font init prevents crashes on startup when the driver isn't ready yet.
     hud_font = pygame.font.SysFont('segoeuisemibold', 24) 
-    text = hud_font.render(f"Score: {score}", antialias=True, color=WHITE)
+    # Fixed: Pygame v2.6.1 requires positional args for render(), not keyword args.
+    text = hud_font.render(f"Score: {score}", True, WHITE)
     screen.blit(text, (10, 10))
 
 def clear_screen(screen):

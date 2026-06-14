@@ -1,16 +1,12 @@
-(pacman-game) PS C:\SyncThing\Homelab\Code\Python\Projects\pacman_game> uv run .\src\main.py
+												(pacman-game) PS C:\SyncThing\Homelab\Code\Python\Projects\pacman_game> uv run .\src\main.py
 pygame 2.6.1 (SDL 2.28.4, Python 3.12.12)
 Hello from the pygame community. https://www.pygame.org/contribute.html
 Traceback (most recent call last):
-  File "C:\SyncThing\Homelab\Code\Python\Projects\pacman_game\src\main.py", line 9, in <module>
-    from ui.renderer import clear_screen, draw_maze, draw_pacman, draw_pellets, draw_hud
-  File "C:\SyncThing\Homelab\Code\Python\Projects\pacman_game\src\ui\renderer.py", line 9, in <module>
-    FONT = pygame.font.SysFont(None, 24)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\SyncThing\Homelab\Code\Python\Projects\pacman_game\.venv\Lib\site-packages\pygame\sysfont.py", line 460, in SysFont
-    return constructor(fontname, size, set_bold, set_italic)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\SyncThing\Homelab\Code\Python\Projects\pacman_game\.venv\Lib\site-packages\pygame\sysfont.py", line 378, in font_constructor
-    font = Font(fontpath, size)
-           ^^^^^^^^^^^^^^^^^^^^
-pygame.error: font not initialized
+  File "C:\SyncThing\Homelab\Code\Python\Projects\pacman_game\src\main.py", line 67, in <module>
+    run_game()
+  File "C:\SyncThing\Homelab\Code\Python\Projects\pacman_game\src\main.py", line 61, in run_game
+    draw_hud(screen, pellets.score)
+  File "C:\SyncThing\Homelab\Code\Python\Projects\pacman_game\src\ui\renderer.py", line 46, in draw_hud
+    text = hud_font.render(f"Score: {score}", antialias=True, color=WHITE)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: Font.render() takes no keyword arguments
