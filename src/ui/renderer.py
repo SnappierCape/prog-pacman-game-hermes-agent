@@ -3,7 +3,7 @@ UI Render Module.
 Handles visualizing the maze structure, entities, collectibles, and HUD.
 """
 import pygame
-from config import BLACK, BLUE, YELLOW, WHITE
+from config import BLACK, BLUE, YELLOW, WHITE, WINDOW_WIDTH, WINDOW_HEIGHT
 from game.level_loader import get_tile_map, TILE_SIZE
 
 def draw_maze(screen):
@@ -39,6 +39,15 @@ def draw_pellets(screen, pellet_manager):
             p['radius']
         )
 
+def draw_ghost(screen, ghost):
+    """Draws a single ghost entity with its color and radius."""
+    pygame.draw.circle(screen, ghost.color, (int(ghost.pos_x), int(ghost.pos_y)), ghost.radius)
+
+def draw_ghosts(screen, ghosts):
+    """Renders all active ghost entities on the screen buffer."""
+    for g in ghosts:
+        draw_ghost(screen, g)
+
 def draw_hud(screen, score):
     """Renders the Score counter in the top-left corner."""
     # Local font init prevents crashes on startup when the driver isn't ready yet.
@@ -46,6 +55,18 @@ def draw_hud(screen, score):
     # Fixed: Pygame v2.6.1 requires positional args for render(), not keyword args.
     text = hud_font.render(f"Score: {score}", True, WHITE)
     screen.blit(text, (10, 10))
+
+def draw_lives(screen, lives):
+    """Renders the remaining lives in the top-right corner as yellow circles."""
+    for i in range(lives - 1): # Draw one less than total to reserve space for score
+        pygame.draw.circle(screen, YELLOW, (WINDOW_WIDTH - 30 - (i * 30), 25), 8)
+
+def draw_game_over(screen):
+    """Renders a big red 'GAME OVER' overlay when lives hit zero."""
+    go_font = pygame.font.SysFont('segoeuisemibold', 48)
+    text = go_font.render("GAME OVER", True, (255, 0, 0))
+    rect = text.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2))
+    screen.blit(text, rect)
 
 def clear_screen(screen):
     """Wipes the display to solid black before re-rendering the frame."""
