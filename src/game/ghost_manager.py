@@ -19,7 +19,9 @@ class GhostManager:
         
         # Extract difficulty configuration
         self.max_ghosts = difficulty_settings['ghost_count']
-        self.base_speed = 2.0 * difficulty_settings['move_speed_factor']
+        # Speed strictly matches Pac-Man (2.0), ignoring difficulty speed factor!
+        from config import MOVEMENT_SPEED
+        self.base_speed = MOVEMENT_SPEED
         self.spawn_delay = difficulty_settings['spawn_delay']
         
         self.next_spawn_time = time.time() + self.spawn_delay
