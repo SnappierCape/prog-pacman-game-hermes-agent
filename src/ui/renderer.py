@@ -1,6 +1,7 @@
 """
 UI Render Module.
 Handles visualizing the maze structure, entities, collectibles, and HUD.
+Uses positional arguments strictly to support older Pygame kernels locally.
 """
 import pygame
 from config import BLACK, BLUE, YELLOW, WHITE, WINDOW_WIDTH, WINDOW_HEIGHT
@@ -12,53 +13,42 @@ def draw_maze(screen):
     
     for y_idx, row in enumerate(rows):
         for x_idx, tile_type in enumerate(row):
+            rect_x = x_idx * TILE_SIZE
+            rect_y = y_idx * TILE_SIZE
+            
             if tile_type == '#':
-                # Calculate pixel coordinates from tile indices
-                rect_x = x_idx * TILE_SIZE
-                rect_y = y_idx * TILE_SIZE
-                
-                # Draw a rectangle of exactly one tile size
-                pygame.draw.rect(screen, BLUE, 
-                                (rect_x, rect_y, TILE_SIZE, TILE_SIZE))
+                pygame.draw.rect(screen, BLUE, (rect_x, rect_y, TILE_SIZE, TILE_SIZE))
+            elif tile_type == '.':
+                # Render a little white dot in the center of empty lanes
+                pygame.draw.rect(screen, WHITE, 
+                                (rect_x + 14, rect_y + 14, 4, 5))
 
 def draw_pacman(screen, pm):
     """Draws the player entity as a yellow circle."""
     radius = 12
-    
-    pygame.draw.circle(screen, YELLOW, 
-                      (int(pm.pos_x), int(pm.pos_y)), 
-                      radius)
+    pygame.draw.circle(screen, YELLOW, (int(pm.pos_x), int(pm.pos_y)), radius)
 
 def draw_pellets(screen, pellet_manager):
     """Draws all active pellets on the board based on their tier."""
     for p in pellet_manager.pellets:
-        pygame.draw.circle(
-            screen,
-            p['color'],
-            (int(p['x']), int(p['y'])),
-            p['radius']
-        )
-
-def draw_ghost(screen, ghost):
-    """Draws a single ghost entity with its color and radius."""
-    pygame.draw.circle(screen, ghost.color, (int(ghost.pos_x), int(ghost.pos_y)), ghost.radius)
+        # Positional args ONLY
+        pygame.draw.circle(screen, p['color'], (int(p['x']), int(p['y'])), p['radius'])
 
 def draw_ghosts(screen, ghosts):
     """Renders all active ghost entities on the screen buffer."""
     for g in ghosts:
-        draw_ghost(screen, g)
+        pygame.draw.circle(screen, g.color, (int(g.pos_x), int(g.pos_y)), g.radius)
 
 def draw_hud(screen, score):
     """Renders the Score counter in the top-left corner."""
-    # Local font init prevents crashes on startup when the driver isn't ready yet.
     hud_font = pygame.font.SysFont('segoeuisemibold', 24) 
-    # Fixed: Pygame v2.6.1 requires positional args for render(), not keyword args.
+    # STRICTLY positional rendering (text, antialias_bool, color_tuple)
     text = hud_font.render(f"Score: {score}", True, WHITE)
     screen.blit(text, (10, 10))
 
 def draw_lives(screen, lives):
     """Renders the remaining lives in the top-right corner as yellow circles."""
-    for i in range(lives - 1): # Draw one less than total to reserve space for score
+    for i in range(lives - 1):
         pygame.draw.circle(screen, YELLOW, (WINDOW_WIDTH - 30 - (i * 30), 25), 8)
 
 def draw_game_over(screen):
